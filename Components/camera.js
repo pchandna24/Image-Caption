@@ -4,7 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import firebase from 'firebase';
-import uuid from 'uuid'
+import uuid from 'uuid';
+import axios from 'axios';
 
 export default class ImagePickerr extends React.Component {
   state = {
@@ -26,6 +27,7 @@ export default class ImagePickerr extends React.Component {
       </Text>
         {image &&
           <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />}
+      <Text style={{padding:20,color:'white',backgroundColor:'#242424',fontFamily:'Roboto',borderRadius: 20}}>{`${res.data}`}</Text>
       </View>
     );
   }
@@ -82,9 +84,22 @@ export default class ImagePickerr extends React.Component {
         imageRef.put(blob).then(snapshot => {
           var storage = firebase.storage();
           var pathReference = storage.ref(filename);
-          pathReference.getDownloadURL().then(url =>{
+          pathReference.getDownloadURL().then(async url =>{
             console.log(url);
-            
+            var data = {
+              "username": url,
+              
+           }
+           console.log("kylie");
+           
+           try{
+            let res = await axios.post('http://a6b1660e.ngrok.io',data)
+            console.log(res.data);
+           }catch(err){
+             console.log(err)
+           }
+        
+
           }) 
         } )
       }
