@@ -10,7 +10,8 @@ import axios from 'axios';
 export default class ImagePickerr extends React.Component {
   state = {
     image: null,
-    isUploading:false
+    isUploading:false,
+    data:null
   };
 
   render() {
@@ -27,7 +28,9 @@ export default class ImagePickerr extends React.Component {
       </Text>
         {image &&
           <Image source={{ uri: image }} style={{ width: 300, height: 300 }} />}
-      <Text style={{padding:20,color:'white',backgroundColor:'#242424',fontFamily:'Roboto',borderRadius: 20}}>{`${res.data}`}</Text>
+      {this.state.data && (
+        <Text style={{padding:20,color:'white',backgroundColor:'#242424',fontFamily:'Roboto',borderRadius: 20}}>{`${this.state.data}`}</Text>
+      )}
       </View>
     );
   }
@@ -51,8 +54,7 @@ export default class ImagePickerr extends React.Component {
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
       quality: 1
     });
 
@@ -93,8 +95,11 @@ export default class ImagePickerr extends React.Component {
            console.log("kylie");
            
            try{
-            let res = await axios.post('http://a6b1660e.ngrok.io',data)
+            let res = await axios.post('http://e73162d0.ngrok.io',data)
             console.log(res.data);
+            this.setState({
+              data:JSON.stringify(res.data)
+            })
            }catch(err){
              console.log(err)
            }
